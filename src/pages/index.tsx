@@ -5,9 +5,12 @@ import { db } from "../services/firebase";
 
 interface Message {
 	id: string;
-	text: string;
-	sender: string;
-	createdAt: Date;
+	date: string;
+	email: string;
+	from: string;
+	message: string;
+	photo: string;
+	to: string;
 }
 
 const MessagesPage: FC = () => {
@@ -15,12 +18,21 @@ const MessagesPage: FC = () => {
 
 	useEffect(() => {
 		const fetchMessages = async () => {
-			const querySnapshot = await getDocs(collection(db, "messages"));
-			const messagesData = querySnapshot.docs.map((doc) => ({
-				id: doc.id,
-				...doc.data(),
-			})) as Message[];
+			const querySnapshot = await getDocs(collection(db, "greetings"));
+			const messagesData = querySnapshot.docs.map((doc) => {
+				const data = doc.data();
+				return {
+					id: doc.id,
+					date: data.date,
+					email: data.email,
+					from: data.from,
+					message: data.message,
+					photo: data.photo,
+					to: data.to,
+				} as Message;
+			});
 			setMessages(messagesData);
+			console.log(messagesData);
 		};
 
 		fetchMessages();
@@ -31,8 +43,8 @@ const MessagesPage: FC = () => {
 			<h1 className="text-2xl font-bold mb-4">Mensajes para ti 💖</h1>
 			{messages.map((msg) => (
 				<div key={msg.id} className="bg-white p-4 mb-4 rounded shadow">
-					<p className="font-bold">{msg.sender}</p>
-					<p>{msg.text}</p>
+					<p className="font-bold">{msg.from}</p>
+					<p>{msg.message}</p>
 				</div>
 			))}
 		</div>

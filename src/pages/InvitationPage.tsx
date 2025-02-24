@@ -2,6 +2,8 @@
 import { FC, useState } from "react";
 import AuthSelector from "../components/Auth/AuthSelector";
 import GreetingForm from "../components/GreetingForm";
+import { signOut } from "firebase/auth";
+import { auth } from "../services/firebase";
 
 const InvitationPage: FC = () => {
 	const [user, setUser] = useState<{
@@ -10,6 +12,10 @@ const InvitationPage: FC = () => {
 		photo?: string;
 	} | null>(null);
 	const [authMethod, setAuthMethod] = useState<"google" | "email" | null>(null);
+
+	function setShowSuccess(arg0: boolean) {
+		throw new Error("Function not implemented.");
+	}
 
 	return (
 		<div className="min-h-screen bg-pink-50 py-8 px-4">
@@ -40,7 +46,18 @@ const InvitationPage: FC = () => {
 						/>
 					</div>
 				) : (
-					<GreetingForm user={user} authMethod={authMethod!} />
+					<GreetingForm
+						user={user}
+						authMethod={authMethod!}
+						onBack={() => {
+							// Limpiar estado de autenticación
+							setUser(null);
+							setAuthMethod(null);
+							// Opcional: cerrar sesión de Firebase
+							signOut(auth);
+						}}
+						onSuccess={() => setShowSuccess(true)}
+					/>
 				)}
 
 				<div className="mt-6 text-center text-sm text-gray-500">
