@@ -12,6 +12,7 @@ interface Message {
 	from: string;
 	message: string;
 	photo: string;
+	status: string;
 	to: string;
 }
 
@@ -37,8 +38,11 @@ const MessagesPage: FC = () => {
 				date: doc.data().date.toDate(),
 				...doc.data(),
 			})) as Message[];
+			const filteredMessages = messagesData.filter(
+				(msg) => msg.status === "approved"
+			);
 
-			setMessages(messagesData);
+			setMessages(filteredMessages);
 			setLoading(false);
 		};
 
@@ -231,9 +235,7 @@ const MessagesPage: FC = () => {
 				</AnimatePresence>
 
 				{/* Footer asegurar que sioempre esté abajo*/}
-				<div className="fixed bottom-0 left-0 right-0">
-					<Footer />
-				</div>
+				<Footer />
 			</div>
 		</div>
 	);

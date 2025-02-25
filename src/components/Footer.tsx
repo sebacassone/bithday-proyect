@@ -4,7 +4,7 @@ import { Github, Linkedin, Code } from "lucide-react";
 
 const Footer = () => {
 	return (
-		<footer className="fixed bottom-0 left-0 right-0 bg-[#F5A6E6] border-t-2 border-[#4AFF09] shadow-lg">
+		<footer className="sticky top-[100vh] bg-[#F5A6E6] border-t-2 border-[#4AFF09] mt-8">
 			<div className="max-w-6xl mx-auto px-4 md:px-8 py-3">
 				<div className="flex flex-col md:flex-row items-center justify-between gap-4">
 					{/* Redes sociales */}
