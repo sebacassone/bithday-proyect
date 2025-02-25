@@ -1,0 +1,35 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main  # Cambia a tu rama principal (master/main)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Instalar Node.js y dependencias
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Usa la versión de Node.js de tu proyecto
+
+      - name: Install dependencies
+        run: npm install
+
+      # Paso opcional: Build del proyecto (si aplica, ej: React, Angular, etc.)
+      - name: Build project
+        run: npm run build  # Ajusta el comando según tu proyecto
+
+      # Instalar Firebase CLI y desplegar
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy to Firebase
+        run: firebase deploy --token "$FIREBASE_TOKEN" --only hosting:birthday-fer-ramos
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
