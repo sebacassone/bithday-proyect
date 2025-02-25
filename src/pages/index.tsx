@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 interface Message {
 	id: string;
-	date: string;
+	date: Date;
 	email: string;
 	from: string;
 	message: string;
@@ -36,10 +36,14 @@ const MessagesPage: FC = () => {
 	useEffect(() => {
 		const fetchMessages = async () => {
 			const querySnapshot = await getDocs(collection(db, "greetings"));
+			// Las fechas se transforman de date: Object { seconds: 1740380306, nanoseconds: 715000000 } a string
+
 			const messagesData = querySnapshot.docs.map((doc) => ({
 				id: doc.id,
+				date: doc.data().date.toDate(),
 				...doc.data(),
 			})) as Message[];
+
 			setMessages(messagesData);
 			setLoading(false);
 		};
@@ -287,17 +291,6 @@ const MessagesPage: FC = () => {
 												</span>{" "}
 												{selectedMessage.from}
 											</p>
-											<p className="text-xs text-[#787878] italic">
-												Enviado el{" "}
-												{new Date(selectedMessage.date).toLocaleDateString(
-													"es-ES",
-													{
-														day: "numeric",
-														month: "long",
-														year: "numeric",
-													}
-												)}
-											</p>
 										</div>
 									</div>
 								</div>
@@ -308,8 +301,8 @@ const MessagesPage: FC = () => {
 							</motion.div>
 						</motion.div>
 					)}
+					<Footer />
 				</AnimatePresence>
-				<Footer />
 			</div>
 		</div>
 	);

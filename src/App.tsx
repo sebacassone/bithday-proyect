@@ -8,8 +8,8 @@ const App: FC = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<ViewMessages />} />
-				<Route path="/invitations" element={<SendInvitations />} />
+				<Route path="/mostrar-encantamiento" element={<ViewMessages />} />
+				<Route path="/" element={<SendInvitations />} />
 			</Routes>
 		</BrowserRouter>
 	);
