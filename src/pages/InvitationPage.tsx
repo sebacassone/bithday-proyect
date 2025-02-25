@@ -4,6 +4,7 @@ import AuthSelector from "../components/Auth/AuthSelector";
 import GreetingForm from "../components/GreetingForm";
 import { signOut } from "firebase/auth";
 import { auth } from "../services/firebase";
+import Footer from "../components/Footer";
 
 const InvitationPage: FC = () => {
 	const [user, setUser] = useState<{
@@ -14,7 +15,7 @@ const InvitationPage: FC = () => {
 	const [authMethod, setAuthMethod] = useState<"google" | "email" | null>(null);
 
 	function setShowSuccess(arg0: boolean) {
-		throw new Error("Function not implemented.");
+		console.log(arg0);
 	}
 
 	return (
@@ -65,6 +66,7 @@ const InvitationPage: FC = () => {
 					<p className="mt-1">¡Gracias por participar! 💖</p>
 				</div>
 			</div>
+			<Footer />
 		</div>
 	);
 };

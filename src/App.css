@@ -1,4 +1,23 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
 @import "tailwindcss";
+
+.font-[DancingScript] {
+	font-family: "Dancing Script", cursive;
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+}
+
+.animate-float {
+	animation: float 4s ease-in-out infinite;
+}
 
 #root {
 	max-width: 1280px;
