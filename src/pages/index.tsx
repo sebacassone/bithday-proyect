@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { AnimatePresence } from "framer-motion";
 import { X, Heart, Sparkles } from "lucide-react";
 import Footer from "../components/Footer";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface Message {
 	id: string;
@@ -50,39 +50,71 @@ const MessagesPage: FC = () => {
 			{/* Efecto de corazones */}
 			<div className="absolute inset-0 flex items-center justify-center pointer-events-none">
 				{[...Array(15)].map((_, i) => (
-					<div
+					<motion.div
 						key={i}
-						className="absolute text-[#BA1212] animate-float"
-						style={{
-							animationDelay: `${Math.random() * 2}s`,
-							left: `${Math.random() * 100}%`,
+						className="absolute text-[#BA1212]"
+						initial={{ scale: 0, opacity: 0, y: 0 }}
+						animate={{
+							scale: [0, 1, 0],
+							opacity: [0, 1, 0],
+							y: [-20, 20, -20],
+						}}
+						transition={{
+							duration: 3 + Math.random() * 4,
+							repeat: Infinity,
+							delay: Math.random() * 2,
 						}}
 					>
 						<Heart className="fill-current" size={28} />
-					</div>
+					</motion.div>
 				))}
 			</div>
 
-			{/* Contenido principal */}
+			{/* Sección principal */}
 			<div className="relative z-10 flex flex-col items-center min-h-screen p-4 md:p-8">
-				{/* Header */}
-				<div className="w-full max-w-2xl text-center mb-8">
-					<div className="relative mx-auto w-32 h-32 md:w-40 md:h-40 mb-6 rounded-full border-4 border-[#4AFF09] shadow-lg overflow-hidden">
+				{/* Header con foto */}
+				<motion.div
+					initial={{ opacity: 0, y: -50 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8 }}
+					className="w-full max-w-2xl text-center mb-8"
+				>
+					<motion.div
+						className="relative mx-auto w-32 h-32 md:w-40 md:h-40 mb-6 rounded-full border-4 border-[#4AFF09] shadow-lg overflow-hidden group"
+						whileHover={{ scale: 1.05 }}
+					>
 						<AnimatePresence mode="wait">
 							{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
 								(imgNumber) =>
 									currentImage === imgNumber && (
-										<img
+										<motion.img
 											key={imgNumber}
 											src={`/assets/imgs/${imgNumber}.jpg`}
 											alt="Fer"
-											className="w-full h-full object-cover absolute inset-0 animate-fade-in"
+											className="w-full h-full object-cover absolute inset-0"
+											initial={{ opacity: 0, scale: 0.8 }}
+											animate={{ opacity: 1, scale: 1 }}
+											exit={{ opacity: 0, scale: 1.2 }}
+											transition={{ duration: 1.2, ease: "easeInOut" }}
+											onLoad={() => console.log(`Imagen ${imgNumber} cargada`)}
+											onError={() =>
+												console.error(`Error cargando imagen ${imgNumber}`)
+											}
 										/>
 									)
 							)}
 						</AnimatePresence>
+
+						{/* Efecto de superposición */}
 						<div className="absolute inset-0 bg-gradient-to-t from-[#BA1212]/30 via-transparent to-[#4AFF09]/20 mix-blend-soft-light" />
-					</div>
+
+						{/* Efecto de brillo animado */}
+						<motion.div
+							className="absolute inset-0 bg-white/10 pointer-events-none"
+							animate={{ opacity: [0, 0.3, 0] }}
+							transition={{ duration: 3, repeat: Infinity }}
+						/>
+					</motion.div>
 
 					<div className="space-y-4">
 						<h1 className="text-4xl md:text-5xl font-bold text-[#BA1212] mb-2 font-[DancingScript] drop-shadow">
@@ -92,8 +124,8 @@ const MessagesPage: FC = () => {
 							<p className="text-[#000000] text-lg md:text-xl leading-relaxed">
 								Con todo el cariño de tus amigues te desean unas palabras (al
 								igual que yo), me hace inmensamente feliz poder hacerte
-								finalmente este regalo con todo mi amor, gracias por existir,
-								por hacerme la vida mucho más bonita. Te amo 🌸✨
+								finalmente este regalo con todo mi amor, gracias por exitir, por
+								hacerme la vida mucho más bonita. Te amo 🌸✨
 								<br />
 								<span className="text-[#BA1212] font-semibold block mt-2">
 									- Sebastián Cassone
@@ -101,14 +133,18 @@ const MessagesPage: FC = () => {
 							</p>
 						</div>
 					</div>
-				</div>
+				</motion.div>
 
 				{/* Mensajes */}
 				{loading ? (
-					<div className="flex flex-col items-center animate-pulse">
-						<div className="w-12 h-12 border-4 border-[#4AFF09] border-t-transparent rounded-full mb-4" />
-						<span className="text-[#787878]">Cargando bendiciones...</span>
-					</div>
+					<motion.div
+						className="flex flex-col items-center"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+					>
+						<div className="w-12 h-12 border-4 border-[#4AFF09] border-t-transparent rounded-full animate-spin mb-4" />
+						<span className="text-[#787878]">Cargando mensajitos...</span>
+					</motion.div>
 				) : (
 					<div className="w-full max-w-6xl mx-auto">
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
@@ -194,7 +230,10 @@ const MessagesPage: FC = () => {
 					)}
 				</AnimatePresence>
 
-				<Footer />
+				{/* Footer asegurar que sioempre esté abajo*/}
+				<div className="fixed bottom-0 left-0 right-0">
+					<Footer />
+				</div>
 			</div>
 		</div>
 	);
